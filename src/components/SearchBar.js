@@ -1,28 +1,19 @@
+// components/SearchBar.js
 import React, { useState } from 'react';
 
-const SearchBar = ({ accessToken, onSearchResults }) => {
+const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
 
-  const handleSearch = async (event) => {
-    event.preventDefault();
-    if (!query) return;
-
-    const searchEndpoint = `https://api.spotify.com/v1/search?q=${query}&type=track`;
-    const response = await fetch(searchEndpoint, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    const data = await response.json();
-    onSearchResults(data.tracks.items);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(query);
   };
 
   return (
-    <form onSubmit={handleSearch} className="search-bar">
+    <form onSubmit={handleSubmit} className="search-bar">
       <input
         type="text"
-        placeholder="Buscar pistas..."
+        placeholder="Buscar canción..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="search-input"

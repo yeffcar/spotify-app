@@ -1,45 +1,60 @@
 // RecentlyPlayed.js
-
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 const RecentlyPlayed = ({ accessToken }) => {
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
 
   useEffect(() => {
-    const fetchRecentlyPlayed = () => {
-      fetch('https://api.spotify.com/v1/me/player/recently-played', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          setRecentlyPlayed(data.items);
-        })
-        .catch(error => {
-          console.error('Error fetching recently played tracks: ', error);
+    if (!accessToken) return;
+
+    const fetchRecentlyPlayed = async () => {
+      try {
+        const response = await fetch('https://api.spotify.com/v1/me/player/recently-played', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
         });
+        if (response.ok) {
+          const data = await response.json();
+          setRecentlyPlayed(data.items);
+        } else {
+          setRecentlyPlayed([]);
+        }
+      } catch (error) {
+        console.error('Error fetching recently played tracks:', error);
+      }
     };
 
-    fetchRecentlyPlayed(); // Llamamos a la función aquí para que se ejecute al inicio
+    fetchRecentlyPlayed(); // Llama a la función al montar el componente
 
-    // Agregamos fetchRecentlyPlayed al array de dependencias para eliminar la advertencia
-  }, [accessToken]); // accessToken es la única dependencia de este efecto
+  }, [accessToken]);
+
+  if (recentlyPlayed.length === 0) {
+    return null;
+  }
 
   return (
-    <div className="recently-played">
-      <h2>Pistas Reproducidas Recientemente</h2>
-      <div className="recently-played-list">
-        {recentlyPlayed.map(track => (
-          <div key={track.track.id} className="recently-played-item">
-            <img src={track.track.album.images[0].url} alt="Album Art" className="recently-played-image" />
-            <div className="recently-played-name">{track.track.name}</div>
+    <div>
+      <div className="current-track-badge">Recently Played</div>
+      <div className="recently-played">
+        {recentlyPlayed.map(item => (
+          <div key={item.played_at} className="recently-played-item">
+            <img src={item.track.album.images[0].url} alt="Album Art" className="track-image" />
+            <div className="track-info">
+              <div className="track-name">{item.track.name}</div>
+              <div className="artist-name">{item.track.artists.map(artist => artist.name).join(', ')}</div>
+            </div>
           </div>
         ))}
       </div>
     </div>
   );
+  
+};
+
+RecentlyPlayed.propTypes = {
+  accessToken: PropTypes.string.isRequired,
 };
 
 export default RecentlyPlayed;
-

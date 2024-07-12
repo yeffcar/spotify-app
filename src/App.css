@@ -1,94 +1,204 @@
-/* App.css */
+/* Estilos para Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
 
-.app {
+.logo {
+  max-height: 50px;
+}
+
+.update-style-button,
+.logout-button {
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-button {
+  background-color: red;
+  color: white;
+}
+
+.login-button {
+  padding: 0.5rem 1rem;
+  background-color: #1DB954;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #1ED760;
+}
+
+@media (max-width: 768px) {
+  .login-button {
+    font-size: 14px;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+/* Estilos para SearchBar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: 0.5rem;
+  background-color: #b9b9b9;
 }
 
-.app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.app-logo {
-  width: 100px;
-  height: 100px;
-}
-
-.update-button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
+.search-input {
+  flex: 1;
+  padding: 0.75rem;
   border: none;
-  cursor: pointer;
+  border-radius: 5px 0 0 5px;
+  font-size: 1rem;
 }
 
-.login-link {
-  display: inline-block;
-  padding: 10px;
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.3);
+}
+
+.search-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0 5px 5px 0;
   background-color: #1db954;
   color: white;
-  text-decoration: none;
-}
-
-.login-link:hover {
-  background-color: #1ed760;
-}
-
-.search-bar {
-  margin-bottom: 20px;
-}
-
-.search-bar input[type="text"] {
-  padding: 10px;
-  width: 200px;
-}
-
-.search-bar button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
   cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
-.search-bar button:hover {
-  background-color: #1a73e8;
+.search-button:hover {
+  background-color: #24cf67;
 }
 
-.tracks-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+@media (max-width: 768px) {
+  .search-bar {
+    padding: 0.5rem;
+  }
+
+  .search-input {
+    font-size: 0.9rem;
+  }
+
+  .search-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
 }
 
-.track {
+/* Estilos para CurrentTrack y RecentlyPlayed */
+.current-track,
+.recently-played {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  padding: 1rem;
+  background-color: #f2f2f2; /* Color de fondo gris claro */
+  margin-top: 1rem; /* Espacio superior */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
 }
 
-.track-image {
-  width: 150px;
-  height: 150px;
+.current-track .track-image,
+.recently-played .track-image {
+  width: 80px;
+  height: 80px;
   object-fit: cover;
+  margin-right: 1rem;
+  border-radius: 8px;
 }
 
-.track-name {
-  margin-top: 10px;
-  text-align: center;
+.current-track .track-info,
+.recently-played .track-info {
+  flex: 1; /* Ocupa todo el espacio restante */
 }
 
-.search-results {
-  margin-top: 20px;
+.current-track .track-name,
+.recently-played .track-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
 }
 
-.track-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+.current-track .artist-name,
+.recently-played .artist-name {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .current-track .track-name,
+  .recently-played .track-name,
+  .current-track .artist-name,
+  .recently-played .artist-name {
+    font-size: 0.9rem;
+  }
+}
+
+/* Estilos específicos para CurrentTrack */
+.current-track-container {
+  margin-top: 1rem; /* Ajusta el margen superior según sea necesario */
+}
+
+.current-track-badge {
+  background-color: #1db954;
+  color: white;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.current-track .track-name {
+  font-weight: bold;
+}
+
+.current-track .artist-name {
+  color: #666;
+}
+
+/* Estilos específicos para RecentlyPlayed */
+.recently-played {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f2f2f2; /* Color de fondo gris claro */
+  margin-top: 1rem; /* Espacio superior */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+.recently-played .track-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 1rem;
+  border-radius: 8px;
+}
+
+.recently-played .track-info {
+  flex: 1; /* Ocupa todo el espacio restante */
+}
+
+.recently-played .track-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.recently-played .artist-name {
+  color: #666;
+  font-size: 0.9rem;
 }

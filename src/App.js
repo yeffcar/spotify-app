@@ -1,44 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import Header from './components/Header';
 import SearchBar from './components/SearchBar';
+import TrackList from './components/TrackList';
+import CurrentTrack from './components/CurrentTrack'; 
 import RecentlyPlayed from './components/RecentlyPlayed';
-import Queue from './components/Queue';
-import CurrentlyPlaying from './components/CurrentlyPlaying';
-import { AuthProvider, useAuth } from './AuthContext';
+import useSpotifyToken from './hooks/useSpotifyToken';
+import useCurrentTrack from './hooks/useCurrentTrack'; 
+import { AUTH_ENDPOINT, SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI, RESPONSE_TYPE, SCOPES } from './Config';
 import './App.css';
 
 const App = () => {
-  const { accessToken, login } = useAuth();
+  const accessToken = useSpotifyToken();
+  const currentTrack = useCurrentTrack(accessToken); 
   const [dynamicStyle, setDynamicStyle] = useState({
     logo: '',
     backgroundColor: '',
     textColor: ''
   });
-  const [searchResults, setSearchResults] = useState([]);
-
-  const SPOTIFY_CLIENT_ID = 'aa7d4420effd4f25b39c659124fa2c00';
-  const SPOTIFY_REDIRECT_URI = 'http://localhost:3000/callback';
-  const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
-  const RESPONSE_TYPE = 'token';
-  const SCOPES = [
-    'user-read-private',
-    'user-read-email',
-    'user-read-recently-played',
-    'user-read-playback-state',
-    'user-read-currently-playing',
-    'user-modify-playback-state'
-  ].join(' ');
-
-  useEffect(() => {
-    const hash = window.location.hash;
-    let token = localStorage.getItem('accessToken');
-
-    if (!token && hash) {
-      token = hash.substring(1).split('&').find(elem => elem.startsWith('access_token')).split('=')[1];
-      window.location.hash = '';
-      login(token);
-      localStorage.setItem('accessToken', token);
-    }
-  }, [login]);
+  const [tracks, setTracks] = useState([]);
 
   useEffect(() => {
     fetchDynamicStyle();
@@ -55,7 +34,7 @@ const App = () => {
         });
       })
       .catch(error => {
-        console.error("Error fetching dynamic style: ", error);
+        console.error('Error fetching dynamic style: ', error);
       });
   };
 
@@ -63,56 +42,51 @@ const App = () => {
     fetchDynamicStyle();
   };
 
-  const handleSearchResults = (results) => {
-    setSearchResults(results);
+  const handleSearch = (query) => {
+    // Realizar la búsqueda en la API de Spotify
+    fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Actualizar el estado de tracks con los resultados de la búsqueda
+        setTracks(data.tracks.items);
+      })
+      .catch(error => {
+        console.error('Error searching tracks: ', error);
+      });
+  };
+
+  const handleLogout = () => {
+    // Eliminar token y datos de sesión
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('expiry_time');
+    
+    // Redirigir al usuario a la página de inicio de sesión de Spotify
+    const logoutUrl = `${AUTH_ENDPOINT}?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT_URI)}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(SCOPES)}`;
+    window.location.replace(logoutUrl);
   };
 
   return (
-    <div className="app">
-      {dynamicStyle.logo && (
-        <header className="app-header">
-          <img src={dynamicStyle.logo} alt="logo" className="app-logo" />
-          <button onClick={handleUpdateStyle} className="update-button">Actualizar Estilo</button>
-        </header>
-      )}
-      {!accessToken ? (
-        <a
-          href={`${AUTH_ENDPOINT}?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${SPOTIFY_REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPES}`}
-          className="login-link"
-        >
-          Iniciar Sesión con Spotify
-        </a>
-      ) : (
+    <div className="app" style={{ backgroundColor: dynamicStyle.backgroundColor, color: dynamicStyle.textColor }}>
+      <Header 
+        logoUrl={dynamicStyle.logo} 
+        onUpdateStyle={handleUpdateStyle} 
+        onLogout={handleLogout} 
+        isAuthenticated={!!accessToken} 
+      />
+      {accessToken && (
         <>
-          <SearchBar accessToken={accessToken} onSearchResults={handleSearchResults} />
-          <div className="tracks-container">
-            <RecentlyPlayed accessToken={accessToken} />
-            <Queue accessToken={accessToken} />
-            <CurrentlyPlaying accessToken={accessToken} />
-          </div>
-          {searchResults.length > 0 && (
-            <div className="search-results">
-              <h2>Resultados de Búsqueda</h2>
-              <div className="track-list">
-                {searchResults.map(track => (
-                  <div key={track.id} className="track">
-                    <img src={track.album.images[0].url} alt="Portada del Álbum" className="track-image"/>
-                    <div className="track-name">{track.name}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <SearchBar accessToken={accessToken} onSearch={handleSearch} />
+          {currentTrack && <CurrentTrack track={currentTrack} />} {/* Renderiza CurrentTrack si hay un track actual */}
+          <RecentlyPlayed accessToken={accessToken} />
+          <TrackList tracks={tracks} />
         </>
       )}
     </div>
   );
 };
 
-const AppWithAuthProvider = () => (
-  <AuthProvider>
-    <App />
-  </AuthProvider>
-);
-
-export default AppWithAuthProvider;
+export default App;
