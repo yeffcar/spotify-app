@@ -5,10 +5,13 @@ import Track from './Track'; // Importar el componente Track
 
 const TrackList = ({ tracks }) => {
   return (
+    <div>
+    <div className="current-track-badge">Search Results</div>
     <div className="track-list">
-      {tracks.map(track => (
+      {tracks.slice(0, 10).map(track => (
         <Track key={track.id} track={track} />
       ))}
+    </div>
     </div>
   );
 };

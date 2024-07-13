@@ -1,4 +1,3 @@
-// RecentlyPlayed.js
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
@@ -17,16 +16,20 @@ const RecentlyPlayed = ({ accessToken }) => {
         });
         if (response.ok) {
           const data = await response.json();
-          setRecentlyPlayed(data.items);
+          setRecentlyPlayed(data.items.slice(0, 10)); // Limitar a 10 elementos
         } else {
-          setRecentlyPlayed([]);
+          console.error('Error fetching recently played tracks:', response.statusText);
         }
       } catch (error) {
         console.error('Error fetching recently played tracks:', error);
       }
     };
 
-    fetchRecentlyPlayed(); // Llama a la función al montar el componente
+    fetchRecentlyPlayed();
+
+    const interval = setInterval(fetchRecentlyPlayed, 30000); // 30 segundos
+
+    return () => clearInterval(interval); // Limpiar intervalo al desmontar el componente
 
   }, [accessToken]);
 
@@ -37,7 +40,7 @@ const RecentlyPlayed = ({ accessToken }) => {
   return (
     <div>
       <div className="current-track-badge">Recently Played</div>
-      <div className="recently-played">
+      <div className="recently-played-grid">
         {recentlyPlayed.map(item => (
           <div key={item.played_at} className="recently-played-item">
             <img src={item.track.album.images[0].url} alt="Album Art" className="track-image" />
@@ -50,7 +53,6 @@ const RecentlyPlayed = ({ accessToken }) => {
       </div>
     </div>
   );
-  
 };
 
 RecentlyPlayed.propTypes = {
