@@ -101,10 +101,11 @@
   }
 }
 
-/* Estilos para CurrentTrack y RecentlyPlayed */
+/* Estilos para CurrentTrack, RecentlyPlayed, TrackItem y QueuePlayer */
 .current-track,
 .recently-played-item,
-.track-item {
+.track-item,
+.queue-item {
   display: flex;
   align-items: center;
   padding: 1rem;
@@ -116,7 +117,8 @@
 
 .current-track .track-image,
 .recently-played-item .track-image,
-.track-item .track-image {
+.track-item .track-image,
+.queue-item .track-image {
   width: 80px;
   height: 80px;
   object-fit: cover;
@@ -126,13 +128,15 @@
 
 .current-track .track-info,
 .recently-played-item .track-info,
-.track-item .track-info {
+.track-item .track-info,
+.queue-item .track-info {
   flex: 1; /* Ocupa todo el espacio restante */
 }
 
 .current-track .track-name,
 .recently-played-item .track-name,
-.track-item .track-name {
+.track-item .track-name,
+.queue-item .track-name {
   font-weight: bold;
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
@@ -140,7 +144,8 @@
 
 .current-track .artist-name,
 .recently-played-item .artist-name,
-.track-item .artist-name {
+.track-item .artist-name,
+.queue-item .artist-name {
   color: #666;
   font-size: 0.9rem;
 }
@@ -149,9 +154,11 @@
   .current-track .track-name,
   .recently-played-item .track-name,
   .track-item .track-name,
+  .queue-item .track-name,
   .current-track .artist-name,
   .recently-played-item .artist-name,
-  .track-item .artist-name {
+  .track-item .artist-name,
+  .queue-item .artist-name {
     font-size: 0.9rem;
   }
 }
@@ -178,9 +185,10 @@
   color: #666;
 }
 
-/* Estilos específicos para RecentlyPlayed y TrackList */
+/* Estilos específicos para RecentlyPlayed, TrackList y QueuePlayer */
 .recently-played-grid,
-.track-list {
+.track-list,
+.queue-list {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
@@ -188,28 +196,96 @@
 
 @media (max-width: 1200px) {
   .recently-played-grid,
-  .track-list {
+  .track-list,
+  .queue-list {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (max-width: 992px) {
   .recently-played-grid,
-  .track-list {
+  .track-list,
+  .queue-list {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .recently-played-grid,
-  .track-list {
+  .track-list,
+  .queue-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 576px) {
   .recently-played-grid,
-  .track-list {
+  .track-list,
+  .queue-list {
     grid-template-columns: 1fr;
   }
+}
+
+/* Estilos específicos para QueuePlayer */
+.queue-player {
+  margin-top: 2rem;
+}
+.queue-player h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+
+/* App.css */
+
+.queue-player {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f2f2f2; /* Color de fondo gris claro */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+.queue-player h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.queue-player ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.queue-player li {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fff;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.queue-player .track-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 1rem;
+  border-radius: 8px;
+}
+
+.queue-player .track-info {
+  flex: 1; /* Ocupa todo el espacio restante */
+}
+
+.queue-player .track-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.queue-player .track-artists,
+.queue-player .track-album {
+  color: #666;
+  font-size: 0.9rem;
 }

@@ -1,17 +1,18 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
-import SearchBar from './components/SearchBar';
 import TrackList from './components/TrackList';
-import CurrentTrack from './components/CurrentTrack'; 
+import CurrentTrack from './components/CurrentTrack';
 import RecentlyPlayed from './components/RecentlyPlayed';
+import QueuePlayer from './components/QueuePlayer'; // Importa el nuevo componente QueuePlayer
 import useSpotifyToken from './hooks/useSpotifyToken';
-import useCurrentTrack from './hooks/useCurrentTrack'; 
+import useCurrentTrack from './hooks/useCurrentTrack';
 import { AUTH_ENDPOINT, SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI, RESPONSE_TYPE, SCOPES } from './Config';
 import './App.css';
 
 const App = () => {
   const accessToken = useSpotifyToken();
-  const currentTrack = useCurrentTrack(accessToken); 
+  const currentTrack = useCurrentTrack(accessToken);
   const [dynamicStyle, setDynamicStyle] = useState({
     logo: '',
     backgroundColor: '',
@@ -72,17 +73,19 @@ const App = () => {
   return (
     <div className="app" style={{ backgroundColor: dynamicStyle.backgroundColor, color: dynamicStyle.textColor }}>
       <Header 
-        logoUrl={dynamicStyle.logo} 
-        onUpdateStyle={handleUpdateStyle} 
-        onLogout={handleLogout} 
-        isAuthenticated={!!accessToken} 
+        logoUrl={dynamicStyle.logo}
+        onUpdateStyle={handleUpdateStyle}
+        onLogout={handleLogout}
+        isAuthenticated={!!accessToken}
+        accessToken={accessToken}
+        onSearch={handleSearch}
       />
       {accessToken && (
         <>
-          <SearchBar accessToken={accessToken} onSearch={handleSearch} />
           {currentTrack && <CurrentTrack track={currentTrack} />} {/* Renderiza CurrentTrack si hay un track actual */}
           <RecentlyPlayed accessToken={accessToken} />
           <TrackList tracks={tracks} />
+          <QueuePlayer accessToken={accessToken} /> {/* Añade el componente QueuePlayer */}
         </>
       )}
     </div>
