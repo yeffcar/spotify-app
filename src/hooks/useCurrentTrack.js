@@ -20,23 +20,22 @@ const useCurrentTrack = (accessToken) => {
         setCurrentTrack(data.item);
       } catch (error) {
         console.error('Error fetching current track:', error);
-        setCurrentTrack(null); // Reset current track state on error
+        setCurrentTrack(null); 
       }
     };
 
-    // Función para obtener el track actual y configurar el intervalo de actualización
     const fetchAndSetCurrentTrack = () => {
       fetchCurrentTrack();
-      const interval = setInterval(fetchCurrentTrack, 10000); // Actualiza cada 10 segundos (ajusta según tus necesidades)
-      return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonta
+      const interval = setInterval(fetchCurrentTrack, 10000); 
+      return () => clearInterval(interval); 
     };
 
-    // Inicia la obtención del track actual y el intervalo al montar el componente
+
     if (accessToken) {
       fetchAndSetCurrentTrack();
     }
 
-    // Limpia el intervalo al desmontar el componente o cuando cambia accessToken
+   
     return () => clearInterval(fetchAndSetCurrentTrack);
   }, [accessToken]);
 

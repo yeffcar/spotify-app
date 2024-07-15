@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Track from './Track'; // Importar el componente Track
+import Track from './Track'; 
 
 const TrackList = ({ tracks }) => {
   return (

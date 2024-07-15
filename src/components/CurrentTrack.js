@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const CurrentTrack = ({ track }) => {
   if (!track) {
-    return null; // Retorna null si no hay un track para mostrar
+    return null; 
   }
 
   return (
@@ -21,7 +21,7 @@ const CurrentTrack = ({ track }) => {
 };
 
 CurrentTrack.propTypes = {
-  track: PropTypes.object // Propiedad track es un objeto que contiene la información del track actual
+  track: PropTypes.object 
 };
 
 export default CurrentTrack;
