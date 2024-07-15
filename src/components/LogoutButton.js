@@ -1,15 +1,15 @@
-// LogoutButton.js
 import React from 'react';
 import PropTypes from 'prop-types';
 
 const LogoutButton = ({ onLogout }) => {
-  const handleLogoutClick = () => {
+  const handleLogoutClick = (event) => {
+    event.preventDefault();
     onLogout();
   };
 
   return (
-    <button onClick={handleLogoutClick} className="logout-button">
-      Cerrar Sesión
+    <button onClick={(event)=> handleLogoutClick(event)} className="logout-button">
+      LogOut
     </button>
   );
 };

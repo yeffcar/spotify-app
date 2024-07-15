@@ -1,4 +1,3 @@
-// QueuePlayer.js
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
@@ -17,7 +16,7 @@ const QueuePlayer = ({ accessToken }) => {
         });
         if (response.ok) {
           const data = await response.json();
-          // Limitar la cola a 10 elementos
+          
           const limitedQueue = data.queue.slice(0, 10);
           setQueue(limitedQueue);
         } else {
@@ -34,12 +33,12 @@ const QueuePlayer = ({ accessToken }) => {
       fetchQueue();
     }, 3000);
 
-    return () => clearInterval(interval); // Limpiar intervalo en el desmontaje del componente
+    return () => clearInterval(interval); 
   }, [accessToken]);
 
   return (
     <div>
-    <div className="current-track-badge">Queue</div>
+    <div className="current-queue-badge">Queue</div>
     <div className="queue-player">
       {queue.length === 0 ? (
         <p>No songs in queue</p>

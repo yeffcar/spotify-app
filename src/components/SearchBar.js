@@ -1,26 +1,32 @@
-// components/SearchBar.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { debounce } from '../utils/debounce';
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSearch(query);
+  useEffect(() => {
+    const debouncedSearch = debounce(onSearch, 500);
+    if (query) {
+      debouncedSearch(query);
+    }
+  }, [query, onSearch]);
+
+  const handleChange = (e) => {
+    setQuery(e.target.value);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="search-bar">
+    <div className="search-bar">
       <input
         type="text"
-        placeholder="Buscar canción..."
+        placeholder="Search Track..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={handleChange}
         className="search-input"
       />
-      <button type="submit" className="search-button">Buscar</button>
-    </form>
+    </div>
   );
 };
 
 export default SearchBar;
+

@@ -16,7 +16,7 @@ const RecentlyPlayed = ({ accessToken }) => {
         });
         if (response.ok) {
           const data = await response.json();
-          setRecentlyPlayed(data.items.slice(0, 10)); // Limitar a 10 elementos
+          setRecentlyPlayed(data.items.slice(0, 10)); 
         } else {
           console.error('Error fetching recently played tracks:', response.statusText);
         }
@@ -27,9 +27,9 @@ const RecentlyPlayed = ({ accessToken }) => {
 
     fetchRecentlyPlayed();
 
-    const interval = setInterval(fetchRecentlyPlayed, 30000); // 30 segundos
+    const interval = setInterval(fetchRecentlyPlayed, 30000); 
 
-    return () => clearInterval(interval); // Limpiar intervalo al desmontar el componente
+    return () => clearInterval(interval); 
 
   }, [accessToken]);
 
@@ -39,7 +39,7 @@ const RecentlyPlayed = ({ accessToken }) => {
 
   return (
     <div>
-      <div className="current-track-badge">Recently Played</div>
+      <div className="current-recently-badge">Recently Played</div>
       <div className="recently-played-grid">
         {recentlyPlayed.map(item => (
           <div key={item.played_at} className="recently-played-item">

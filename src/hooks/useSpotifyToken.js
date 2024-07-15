@@ -1,8 +1,7 @@
-// useSpotifyToken.js
 import { useState, useEffect, useCallback } from 'react';
 import { AUTH_ENDPOINT, SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI, RESPONSE_TYPE, SCOPES } from '../Config';
 
-const useSpotifyToken = () => {
+const useSpotifyToken = (logout) => {
   const [accessToken, setAccessToken] = useState(null);
 
   const renewToken = useCallback(() => {

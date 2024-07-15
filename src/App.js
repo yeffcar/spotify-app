@@ -1,13 +1,11 @@
-// App.js
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import TrackList from './components/TrackList';
 import CurrentTrack from './components/CurrentTrack';
 import RecentlyPlayed from './components/RecentlyPlayed';
-import QueuePlayer from './components/QueuePlayer'; // Importa el nuevo componente QueuePlayer
+import QueuePlayer from './components/QueuePlayer';
 import useSpotifyToken from './hooks/useSpotifyToken';
 import useCurrentTrack from './hooks/useCurrentTrack';
-import { AUTH_ENDPOINT, SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI, RESPONSE_TYPE, SCOPES } from './Config';
 import './App.css';
 
 const App = () => {
@@ -44,7 +42,6 @@ const App = () => {
   };
 
   const handleSearch = (query) => {
-    // Realizar la búsqueda en la API de Spotify
     fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
@@ -52,7 +49,6 @@ const App = () => {
     })
       .then(response => response.json())
       .then(data => {
-        // Actualizar el estado de tracks con los resultados de la búsqueda
         setTracks(data.tracks.items);
       })
       .catch(error => {
@@ -61,13 +57,9 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    // Eliminar token y datos de sesión
     window.localStorage.removeItem('token');
     window.localStorage.removeItem('expiry_time');
-    
-    // Redirigir al usuario a la página de inicio de sesión de Spotify
-    const logoutUrl = `${AUTH_ENDPOINT}?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT_URI)}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(SCOPES)}`;
-    window.location.replace(logoutUrl);
+    window.location.reload();
   };
 
   return (
@@ -82,10 +74,10 @@ const App = () => {
       />
       {accessToken && (
         <>
-          {currentTrack && <CurrentTrack track={currentTrack} />} {/* Renderiza CurrentTrack si hay un track actual */}
-          <RecentlyPlayed accessToken={accessToken} />
-          <TrackList tracks={tracks} />
-          <QueuePlayer accessToken={accessToken} /> {/* Añade el componente QueuePlayer */}
+           {currentTrack && <CurrentTrack track={currentTrack} className="component-spacing" />} 
+          <TrackList tracks={tracks} className="component-spacing" />
+          <RecentlyPlayed accessToken={accessToken} className="component-spacing" />
+          <QueuePlayer accessToken={accessToken} className="component-spacing" /> 
         </>
       )}
     </div>
